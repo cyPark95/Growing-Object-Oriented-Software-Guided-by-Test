@@ -8,6 +8,7 @@ import static study.goos.FakeAuctionServer.XMPP_HOSTNAME;
 public class ApplicationRunner {
 
     public static final String SNIPER_ID = "sniper";
+    public static final String SNIPER_XMPP_ID = "sniper@localhost/Auction";
     public static final String SNIPER_PASSWORD = "sniper";
 
     private AuctionSniperDriver driver;
@@ -29,6 +30,10 @@ public class ApplicationRunner {
         thread.start();
         driver = new AuctionSniperDriver(1000);
         driver.showsSniperStatus(STATUS_JOINING);
+    }
+
+    public void hasShownSniperIsBidding() {
+        driver.showsSniperStatus(STATUS_BIDDING);
     }
 
     public void showsSniperHasLostAuction() {

@@ -23,5 +23,6 @@ public class AuctionSniperDriver extends JFrameDriver {
     }
 
     public void depose() {
+
     }
 }
