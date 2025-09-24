@@ -3,11 +3,14 @@ package study.goos;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.Message;
+import study.goos.auctionsniper.AuctionEventListener;
+import study.goos.auctionsniper.AuctionMessageTranslator;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-public class Main {
+public class Main implements AuctionEventListener {
 
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
@@ -21,6 +24,10 @@ public class Main {
     public static final String SNIPER_STATUS_NAME = "sniper status";
     public static final String STATUS_JOINING = "Joining";
     public static final String STATUS_LOST = "Lost";
+    public static final String STATUS_BIDDING = "Bidding";
+
+    public static final String JOIN_COMMAND_FORMAT = "JOIN_COMMAND";
+    public static final String BID_COMMAND_FORMAT = null;
 
     private static MainWindow ui;
 
@@ -31,12 +38,12 @@ public class Main {
     public static void main(String... args) throws Exception {
         Main main = new Main();
         XMPPConnection connection = connectTo(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
+        main.joinAuction(connection, args[ARG_ITEM_ID]);
+    }
 
-        Chat chat = connection.getChatManager().createChat(
-                auctionId(args[ARG_ITEM_ID], connection),
-                (aChat, message) -> SwingUtilities.invokeLater(() -> ui.showStatus(STATUS_LOST))
-        );
-        chat.sendMessage(new Message());
+    @Override
+    public void auctionClosed() {
+        SwingUtilities.invokeLater(() -> ui.showStatus(STATUS_LOST));
     }
 
     private static XMPPConnection connectTo(String hostname, String username, String password) throws XMPPException {
@@ -51,7 +58,23 @@ public class Main {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
     }
 
+    private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+        disconnectWhenUICloses(connection);
+        Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), new AuctionMessageTranslator(this));
+        chat.sendMessage(JOIN_COMMAND_FORMAT);
+    }
+
     private static String auctionId(String itemId, XMPPConnection connection) {
         return String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
+    }
+
+    private void disconnectWhenUICloses(final XMPPConnection connection) {
+        ui.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                connection.disconnect();
+            }
+        });
     }
 }
