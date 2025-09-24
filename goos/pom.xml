@@ -23,6 +23,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.igniterealtime.smack</groupId>
+            <artifactId>smackx</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.googlecode.windowlicker</groupId>
             <artifactId>windowlicker-swing</artifactId>
             <version>r268</version>
