@@ -42,7 +42,7 @@ public class ApplicationRunner {
 
     public void stop() {
         if (driver != null) {
-            driver.depose();
+            driver.dispose();
         }
     }
 }
