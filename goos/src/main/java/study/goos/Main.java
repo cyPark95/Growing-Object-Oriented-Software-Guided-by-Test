@@ -46,6 +46,11 @@ public class Main implements AuctionEventListener {
         SwingUtilities.invokeLater(() -> ui.showStatus(STATUS_LOST));
     }
 
+    @Override
+    public void currentPrice(int price, int increment) {
+
+    }
+
     private static XMPPConnection connectTo(String hostname, String username, String password) throws XMPPException {
         XMPPConnection connection = new XMPPConnection(hostname);
         connection.connect();
@@ -72,7 +77,7 @@ public class Main implements AuctionEventListener {
         ui.addWindowListener(new WindowAdapter() {
 
             @Override
-            public void windowClosing(WindowEvent e) {
+            public void windowClosed(WindowEvent e) {
                 connection.disconnect();
             }
         });
