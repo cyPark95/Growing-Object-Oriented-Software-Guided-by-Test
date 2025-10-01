@@ -43,6 +43,26 @@ public class AuctionSniperEndToEndTest {
         application.showsSniperHasLostAuction();
     }
 
+    @Test
+    public void sniperWinsAnAuctionByBiddingHigher() throws Exception {
+        auction.startSellingItem();
+
+        application.startBiddingIn(auction);
+        auction.hasReceivedJoinRequestFrom(SNIPER_XMPP_ID);
+
+        auction.reportPrice(1000, 98, "other bidder");
+        application.hasShownSniperIsBidding();
+
+        auction.hasReceivedBid(1098, SNIPER_XMPP_ID);
+
+        auction.reportPrice(1098, 97, SNIPER_XMPP_ID);
+        // 최종 가격을 제시한 입찰자가 스나이퍼인지 확인한다.
+        application.hasShownSniperIsWinning();
+
+        auction.announceClosed();
+        application.showsSniperHasWonAuction();
+    }
+
     @After
     public void stopAuction() {
         auction.stop();

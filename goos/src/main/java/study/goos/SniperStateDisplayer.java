@@ -14,12 +14,17 @@ public class SniperStateDisplayer implements SniperListener {
     }
 
     @Override
+    public void sniperWinning() {
+        showStatus(STATUS_WINNING);
+    }
+
+    @Override
     public void sniperLost() {
         showStatus(STATUS_LOST);
     }
 
     @Override
-    public void sniperWinning() {
+    public void sniperWon() {
         showStatus(STATUS_WINNING);
     }
 
