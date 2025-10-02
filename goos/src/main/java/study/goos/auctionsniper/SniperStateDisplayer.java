@@ -1,10 +1,9 @@
-package study.goos;
-
-import study.goos.auctionsniper.SniperListener;
+package study.goos.auctionsniper;
 
 import javax.swing.*;
 
 import static study.goos.Main.*;
+import static study.goos.MainWindow.*;
 
 public class SniperStateDisplayer implements SniperListener {
 

@@ -1,4 +1,4 @@
-package study.goos.auctionsniper;
+package study.goos.e2e;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.JFrameDriver;
@@ -6,8 +6,8 @@ import com.objogate.wl.swing.driver.JLabelDriver;
 import com.objogate.wl.swing.gesture.GesturePerformer;
 
 import static org.hamcrest.Matchers.equalTo;
-import static study.goos.Main.SNIPER_STATUS_NAME;
 import static study.goos.MainWindow.MAIN_WINDOW_NAME;
+import static study.goos.MainWindow.SNIPER_STATUS_NAME;
 
 public class AuctionSniperDriver extends JFrameDriver {
 

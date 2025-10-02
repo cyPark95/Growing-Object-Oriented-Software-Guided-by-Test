@@ -1,4 +1,4 @@
-package study.goos;
+package study.goos.e2e;
 
 import org.hamcrest.Matcher;
 import org.jivesoftware.smack.*;

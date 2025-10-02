@@ -1,9 +1,9 @@
-package study.goos;
+package study.goos.e2e;
 
 import org.junit.After;
 import org.junit.Test;
 
-import static study.goos.ApplicationRunner.SNIPER_XMPP_ID;
+import static study.goos.e2e.ApplicationRunner.SNIPER_XMPP_ID;
 
 public class AuctionSniperEndToEndTest {
 
