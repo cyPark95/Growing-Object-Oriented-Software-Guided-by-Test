@@ -4,11 +4,14 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.packet.Message;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import study.goos.auctionsniper.AuctionEventListener.PriceSource;
 
 import static study.goos.e2e.ApplicationRunner.SNIPER_ID;
 
+@RunWith(JMock.class)
 public class AuctionMessageTranslatorTest {
 
     public static final Chat UNUSED_CHAT = null;
