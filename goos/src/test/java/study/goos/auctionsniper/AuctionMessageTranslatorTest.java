@@ -7,7 +7,7 @@ import org.jmock.Mockery;
 import org.junit.Test;
 import study.goos.auctionsniper.AuctionEventListener.PriceSource;
 
-import static study.goos.ApplicationRunner.SNIPER_ID;
+import static study.goos.e2e.ApplicationRunner.SNIPER_ID;
 
 public class AuctionMessageTranslatorTest {
 
@@ -25,7 +25,6 @@ public class AuctionMessageTranslatorTest {
 
         Message message = new Message();
         message.setBody("SOLVersion: 1.1; Event: CLOSE;");
-
         translator.processMessage(UNUSED_CHAT, message);
     }
 
@@ -37,7 +36,6 @@ public class AuctionMessageTranslatorTest {
 
         Message message = new Message();
         message.setBody("SQLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; Bidder: Someone else;");
-
         translator.processMessage(UNUSED_CHAT, message);
     }
 

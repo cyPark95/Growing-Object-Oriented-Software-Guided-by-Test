@@ -20,14 +20,10 @@ public class Main {
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 
-    public static final String SNIPER_STATUS_NAME = "sniper status";
-    public static final String STATUS_JOINING = "Joining";
-    public static final String STATUS_BIDDING = "Bidding";
-    public static final String STATUS_LOST = "Lost";
-    public static final String STATUS_WINNING = "Winning";
-
     public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
     public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d";
+
+    @SuppressWarnings("unused") private Chat notTobeGCd;
 
     public static MainWindow ui;
 
@@ -57,6 +53,7 @@ public class Main {
         disconnectWhenUICloses(connection);
 
         final Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
+        this.notTobeGCd = chat;
 
         Auction auction = new XMPPAuction(chat);
         chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(), new AuctionSniper(auction, new SniperStateDisplayer())));

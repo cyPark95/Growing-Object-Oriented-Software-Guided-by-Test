@@ -1,4 +1,4 @@
-package study.goos;
+package study.goos.auctionsniper;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -6,10 +6,7 @@ import org.jmock.States;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import study.goos.auctionsniper.Auction;
 import study.goos.auctionsniper.AuctionEventListener.PriceSource;
-import study.goos.auctionsniper.AuctionSniper;
-import study.goos.auctionsniper.SniperListener;
 
 @RunWith(JMock.class)
 public class AuctionSniperTest {

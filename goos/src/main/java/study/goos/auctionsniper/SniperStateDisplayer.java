@@ -1,10 +1,9 @@
-package study.goos;
-
-import study.goos.auctionsniper.SniperListener;
+package study.goos.auctionsniper;
 
 import javax.swing.*;
 
 import static study.goos.Main.*;
+import static study.goos.MainWindow.*;
 
 public class SniperStateDisplayer implements SniperListener {
 
@@ -25,7 +24,7 @@ public class SniperStateDisplayer implements SniperListener {
 
     @Override
     public void sniperWon() {
-        showStatus(STATUS_WINNING);
+        showStatus(STATUS_WON);
     }
 
     private void showStatus(String statusBidding) {

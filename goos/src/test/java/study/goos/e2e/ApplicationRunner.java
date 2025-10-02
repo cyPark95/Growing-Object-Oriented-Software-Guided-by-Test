@@ -1,9 +1,9 @@
-package study.goos;
+package study.goos.e2e;
 
-import study.goos.auctionsniper.AuctionSniperDriver;
+import study.goos.Main;
 
-import static study.goos.Main.*;
-import static study.goos.FakeAuctionServer.XMPP_HOSTNAME;
+import static study.goos.MainWindow.*;
+import static study.goos.e2e.FakeAuctionServer.XMPP_HOSTNAME;
 
 public class ApplicationRunner {
 
@@ -45,7 +45,7 @@ public class ApplicationRunner {
     }
 
     public void showsSniperHasWonAuction() {
-        driver.showsSniperStatus(STATUS_WINNING);
+        driver.showsSniperStatus(STATUS_WON);
     }
 
     public void stop() {

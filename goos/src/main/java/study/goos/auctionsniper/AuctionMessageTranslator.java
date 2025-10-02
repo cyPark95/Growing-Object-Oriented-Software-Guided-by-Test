@@ -14,7 +14,6 @@ import static study.goos.auctionsniper.AuctionEventListener.PriceSource.FROM_SNI
 public class AuctionMessageTranslator implements MessageListener {
 
     private final String sniperId;
-
     private final AuctionEventListener listener;
 
     public AuctionMessageTranslator(String sniperId, AuctionEventListener listener) {
@@ -76,7 +75,7 @@ public class AuctionMessageTranslator implements MessageListener {
         }
 
         public PriceSource isFrom(String sniperId) {
-            return sniperId.equals(bidder()) ? FROM_SNIPER: FROM_OTHER_BIDDER;
+            return sniperId.equals(bidder()) ? FROM_SNIPER : FROM_OTHER_BIDDER;
         }
 
         private String bidder() {
