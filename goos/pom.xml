@@ -32,12 +32,31 @@
             <groupId>com.googlecode.windowlicker</groupId>
             <artifactId>windowlicker-swing</artifactId>
             <version>r268</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.googlecode.windowlicker</groupId>
+                    <artifactId>windowlicker-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>com.googlecode.windowlicker</groupId>
             <artifactId>windowlicker-core</artifactId>
             <version>r268</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-all</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>3.0</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
