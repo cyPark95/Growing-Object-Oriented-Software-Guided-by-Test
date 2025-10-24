@@ -34,7 +34,7 @@ public class AuctionSniperEndToEndTest {
         // 1. 경매에서 스나이퍼로 가격을 보내게 한다.
         auction.reportPrice(1000, 98, "other bidder");
         // 2. 스나이퍼에서 가격을 받고 응답했는지 확인한다.
-        application.hasShownSniperIsBidding();
+        application.hasShownSniperIsBidding(1000, 1098);
 
         // 3. 경매에서 스나이퍼로부터 입찰가가 오른 입찰을 받았는지 확인한다.
         auction.hasReceivedBid(1098, SNIPER_XMPP_ID);
@@ -51,16 +51,16 @@ public class AuctionSniperEndToEndTest {
         auction.hasReceivedJoinRequestFrom(SNIPER_XMPP_ID);
 
         auction.reportPrice(1000, 98, "other bidder");
-        application.hasShownSniperIsBidding();
+        application.hasShownSniperIsBidding(1000, 1098);  // 최종 가격과 입찰
 
         auction.hasReceivedBid(1098, SNIPER_XMPP_ID);
 
         auction.reportPrice(1098, 97, SNIPER_XMPP_ID);
         // 최종 가격을 제시한 입찰자가 스나이퍼인지 확인한다.
-        application.hasShownSniperIsWinning();
+        application.hasShownSniperIsWinning(1098);  // 낙찰
 
         auction.announceClosed();
-        application.showsSniperHasWonAuction();
+        application.showsSniperHasWonAuction(1098);  // 최종 가격
     }
 
     @After

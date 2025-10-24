@@ -8,8 +8,8 @@ import static study.goos.MainWindow.*;
 public class SniperStateDisplayer implements SniperListener {
 
     @Override
-    public void sniperBidding() {
-        showStatus(STATUS_BIDDING);
+    public void sniperBidding(SniperState state) {
+        SwingUtilities.invokeLater(() -> ui.sniperStatusChanged(state, STATUS_BIDDING));
     }
 
     @Override
@@ -28,6 +28,6 @@ public class SniperStateDisplayer implements SniperListener {
     }
 
     private void showStatus(String statusBidding) {
-        SwingUtilities.invokeLater(() -> ui.showStatus(statusBidding));
+        SwingUtilities.invokeLater(() -> ui.showStatusText(statusBidding));
     }
 }
