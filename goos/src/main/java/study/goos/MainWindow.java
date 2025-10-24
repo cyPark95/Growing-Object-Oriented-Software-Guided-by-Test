@@ -1,5 +1,7 @@
 package study.goos;
 
+import study.goos.auctionsniper.SnipersTableModel;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -15,15 +17,35 @@ public class MainWindow extends JFrame {
     public static final String STATUS_WINNING = "Winning";
     public static final String STATUS_WON = "Winning";
 
+    private static final String SNIPERS_TABLE_NAME = "SNIPERS_TABLE_NAME";
+
     private final JLabel sniperStatus = createLabel(STATUS_JOINING);
+    private final SnipersTableModel snipers = new SnipersTableModel();
 
     public MainWindow() {
         super("Auction Sniper");
         setName(MAIN_WINDOW_NAME);
-        add(sniperStatus);
+        fillContentPane(makeSnipersTable());
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    public void showStatusText(String statusText) {
+        snipers.setStatusText(statusText);
+    }
+
+    private JTable makeSnipersTable() {
+        final JTable snipersTable = new JTable(snipers);
+        snipersTable.setName(SNIPERS_TABLE_NAME);
+        return snipersTable;
+    }
+
+    private void fillContentPane(JTable snipersTable) {
+        final Container contentPane = getContentPane();
+        contentPane.setLayout(new BorderLayout());
+
+        contentPane.add(new JScrollPane(snipersTable), BorderLayout.CENTER);
     }
 
     public void showStatus(String status) {
