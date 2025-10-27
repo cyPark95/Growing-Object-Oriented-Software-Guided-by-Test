@@ -1,17 +1,21 @@
 package study.goos.auctionsniper;
 
+import study.goos.auctionsniper.SniperSnapshot.SniperState;
+
 import javax.swing.table.AbstractTableModel;
 
-import static study.goos.MainWindow.*;
-import static study.goos.auctionsniper.SniperSnapshot.SniperState.*;
+import static study.goos.auctionsniper.SniperSnapshot.SniperState.JOINING;
 
 public class SnipersTableModel extends AbstractTableModel {
 
-    private static String[] STATUS_TEXT = {STATUS_JOINING, STATUS_BIDDING, STATUS_WINNING, STATUS_LOST, STATUS_WON};
+    private static final String[] STATUS_TEXT = {"Joining", "Bidding", "Lost", "Winning", "Winning"};
     private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, JOINING);
 
-    private String state = STATUS_JOINING;
     private SniperSnapshot snapshot = STARTING_UP;
+
+    public static String textFor(SniperState state) {
+        return STATUS_TEXT[state.ordinal()];
+    }
 
     @Override
     public int getRowCount() {
@@ -25,23 +29,11 @@ public class SnipersTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return switch (Column.at(columnIndex)) {
-            case ITEM_IDENTIFIER -> snapshot.itemId;
-            case LAST_PRICE -> snapshot.lastPrice;
-            case LAST_BID -> snapshot.lastBid;
-            case SNIPER_STATE -> state;
-        };
-    }
-
-    public void setStatusText(String newStatusText) {
-        state = newStatusText;
-        fireTableRowsUpdated(0, 0);
+        return Column.at(columnIndex).valueIn(snapshot);
     }
 
     public void sniperStatusChanged(SniperSnapshot newSnapshot) {
         this.snapshot = newSnapshot;
-        this.state = STATUS_TEXT[newSnapshot.state.ordinal()];
-
         fireTableRowsUpdated(0, 0);
     }
 }

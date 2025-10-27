@@ -1,6 +1,5 @@
 package study.goos;
 
-import study.goos.auctionsniper.SniperSnapshot;
 import study.goos.auctionsniper.SnipersTableModel;
 
 import javax.swing.*;
@@ -10,31 +9,18 @@ public class MainWindow extends JFrame {
 
     public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
 
-    public static final String STATUS_JOINING = "Joining";
-    public static final String STATUS_BIDDING = "Bidding";
-    public static final String STATUS_LOST = "Lost";
-    public static final String STATUS_WINNING = "Winning";
-    public static final String STATUS_WON = "Winning";
-
     private static final String SNIPERS_TABLE_NAME = "SNIPERS_TABLE_NAME";
 
-    private final SnipersTableModel snipers = new SnipersTableModel();
+    private final SnipersTableModel snipers;
 
-    public MainWindow() {
+    public MainWindow(SnipersTableModel snipers) {
         super("Auction Sniper");
+        this.snipers = snipers;
         setName(MAIN_WINDOW_NAME);
         fillContentPane(makeSnipersTable());
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-    }
-
-    public void showStatusText(String statusText) {
-        snipers.setStatusText(statusText);
-    }
-
-    public void sniperStatusChanged(SniperSnapshot snapshot) {
-        snipers.sniperStatusChanged(snapshot);
     }
 
     private JTable makeSnipersTable() {

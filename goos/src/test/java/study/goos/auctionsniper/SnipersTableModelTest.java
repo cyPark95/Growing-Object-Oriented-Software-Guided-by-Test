@@ -15,7 +15,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertEquals;
-import static study.goos.MainWindow.STATUS_BIDDING;
 import static study.goos.auctionsniper.Column.*;
 import static study.goos.auctionsniper.SniperSnapshot.SniperState.BIDDING;
 
@@ -47,7 +46,7 @@ public class SnipersTableModelTest {
         assertColumnEquals(ITEM_IDENTIFIER, "item id");
         assertColumnEquals(LAST_PRICE, 555);
         assertColumnEquals(LAST_BID, 666);
-        assertColumnEquals(SNIPER_STATE, STATUS_BIDDING);
+        assertColumnEquals(SNIPER_STATE, SnipersTableModel.textFor(BIDDING));
     }
 
     private Matcher<TableModelEvent> aRowChangedEvent() {

@@ -23,9 +23,11 @@ public class Main {
     public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
     public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d";
 
-    @SuppressWarnings("unused") private Chat notTobeGCd;
-
     public static MainWindow ui;
+
+    private final SnipersTableModel snipers = new SnipersTableModel();
+
+    @SuppressWarnings("unused") private Chat notTobeGCd;
 
     public Main() throws Exception {
         startUserInterface();
@@ -46,7 +48,7 @@ public class Main {
     }
 
     private void startUserInterface() throws Exception {
-        SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
+        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
     }
 
     private void joinAuction(XMPPConnection connection, String itemId) {
@@ -56,7 +58,12 @@ public class Main {
         this.notTobeGCd = chat;
 
         Auction auction = new XMPPAuction(chat);
-        chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(), new AuctionSniper(itemId, auction, new SniperStateDisplayer())));
+        chat.addMessageListener(
+                new AuctionMessageTranslator(
+                        connection.getUser(),
+                        new AuctionSniper(itemId, auction, new SwingThreadSniperListener(snipers))
+                )
+        );
         auction.join();
     }
 

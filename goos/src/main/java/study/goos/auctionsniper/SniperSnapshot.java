@@ -1,5 +1,7 @@
 package study.goos.auctionsniper;
 
+import com.objogate.exception.Defect;
+
 import java.util.Objects;
 
 import static study.goos.auctionsniper.SniperSnapshot.SniperState.*;
@@ -30,6 +32,10 @@ public class SniperSnapshot {
         return new SniperSnapshot(itemId, newLastPrice, lastBid, WINNING);
     }
 
+    public SniperSnapshot closed() {
+        return new SniperSnapshot(itemId, lastPrice, lastBid, state.whenAuctionClosed());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -54,11 +60,30 @@ public class SniperSnapshot {
 
     public enum SniperState {
 
-        JOINING,
-        BIDDING,
-        WINNING,
+        JOINING {
+            @Override
+            public SniperState whenAuctionClosed() {
+                return LOST;
+            }
+        },
+        BIDDING {
+            @Override
+            public SniperState whenAuctionClosed() {
+                return LOST;
+            }
+        },
+        WINNING {
+            @Override
+            public SniperState whenAuctionClosed() {
+                return WON;
+            }
+        },
         LOST,
         WON,
         ;
+
+        public SniperState whenAuctionClosed() {
+            throw new Defect("Auction is already closed");
+        }
     }
 }

@@ -12,8 +12,7 @@ import study.goos.auctionsniper.AuctionEventListener.PriceSource;
 import study.goos.auctionsniper.SniperSnapshot.SniperState;
 
 import static org.hamcrest.Matchers.equalTo;
-import static study.goos.auctionsniper.SniperSnapshot.SniperState.BIDDING;
-import static study.goos.auctionsniper.SniperSnapshot.SniperState.WINNING;
+import static study.goos.auctionsniper.SniperSnapshot.SniperState.*;
 
 @RunWith(JMock.class)
 public class AuctionSniperTest {
@@ -29,7 +28,7 @@ public class AuctionSniperTest {
     @Test
     public void reportsLostIfAuctionClosesImmediately() {
         context.checking(new Expectations() {{
-            one(sniperListener).sniperLost();
+            one(sniperListener).sniperStateChanged(with(aSniperThatIs(LOST)));
         }});
 
         sniper.auctionClosed();
@@ -66,7 +65,7 @@ public class AuctionSniperTest {
         context.checking(new Expectations() {{
             ignoring(auction);
             allowing(sniperListener).sniperStateChanged(with(aSniperThatIs(BIDDING))); then(sniperState.is("bidding"));
-            atLeast(1).of(sniperListener).sniperLost(); when(sniperState.is("bidding"));
+            atLeast(1).of(sniperListener).sniperStateChanged(with(aSniperThatIs(LOST))); when(sniperState.is("bidding"));
         }});
 
         sniper.currentPrice(123, 45, PriceSource.FROM_OTHER_BIDDER);
@@ -78,7 +77,7 @@ public class AuctionSniperTest {
         context.checking(new Expectations() {{
             ignoring(auction);
             allowing(sniperListener).sniperStateChanged(with(aSniperThatIs(WINNING))); then(sniperState.is("Winning"));
-            atLeast(1).of(sniperListener).sniperWon(); when(sniperState.is("Winning"));
+            atLeast(1).of(sniperListener).sniperStateChanged(with(aSniperThatIs(WON))); when(sniperState.is("Winning"));
         }});
 
         sniper.currentPrice(123, 45, PriceSource.FROM_SNIPER);
