@@ -1,6 +1,6 @@
 package study.goos;
 
-import study.goos.auctionsniper.SniperState;
+import study.goos.auctionsniper.SniperSnapshot;
 import study.goos.auctionsniper.SnipersTableModel;
 
 import javax.swing.*;
@@ -33,8 +33,8 @@ public class MainWindow extends JFrame {
         snipers.setStatusText(statusText);
     }
 
-    public void sniperStatusChanged(SniperState sniperState, String statusText) {
-        snipers.sniperStatusChanged(sniperState, statusText);
+    public void sniperStatusChanged(SniperSnapshot snapshot) {
+        snipers.sniperStatusChanged(snapshot);
     }
 
     private JTable makeSnipersTable() {

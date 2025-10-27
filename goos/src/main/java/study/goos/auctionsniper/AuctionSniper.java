@@ -6,12 +6,12 @@ public class AuctionSniper implements AuctionEventListener {
     private final SniperListener sniperListener;
 
     private boolean isWinning = false;
-    private String itemId;
+    private SniperSnapshot snapshot;
 
     public AuctionSniper(String itemId, Auction auction, SniperListener sniperListener) {
-        this.itemId = itemId;
         this.auction = auction;
         this.sniperListener = sniperListener;
+        this.snapshot = SniperSnapshot.joining(itemId);
     }
 
     @Override
@@ -26,12 +26,13 @@ public class AuctionSniper implements AuctionEventListener {
     @Override
     public void currentPrice(int price, int increment, PriceSource priceSource) {
         isWinning = priceSource == PriceSource.FROM_SNIPER;
-        if(isWinning) {
-            sniperListener.sniperWinning();
+        if (isWinning) {
+            snapshot = snapshot.winning(price);
         } else {
-            int bid = price + increment;
+            final int bid = price + increment;
             auction.bid(bid);
-            sniperListener.sniperBidding(new SniperState(itemId, price, bid));
+            snapshot = snapshot.bidding(price, bid);
         }
+        sniperListener.sniperStateChanged(snapshot);
     }
 }

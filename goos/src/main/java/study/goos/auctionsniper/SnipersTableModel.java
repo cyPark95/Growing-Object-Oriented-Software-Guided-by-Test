@@ -2,14 +2,16 @@ package study.goos.auctionsniper;
 
 import javax.swing.table.AbstractTableModel;
 
-import static study.goos.MainWindow.STATUS_JOINING;
+import static study.goos.MainWindow.*;
+import static study.goos.auctionsniper.SniperSnapshot.SniperState.*;
 
 public class SnipersTableModel extends AbstractTableModel {
 
-    private final static SniperState STARTING_UP = new SniperState("", 0, 0);
+    private static String[] STATUS_TEXT = {STATUS_JOINING, STATUS_BIDDING, STATUS_WINNING, STATUS_LOST, STATUS_WON};
+    private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, JOINING);
 
-    private String statusText = STATUS_JOINING;
-    private SniperState sniperState = STARTING_UP;
+    private String state = STATUS_JOINING;
+    private SniperSnapshot snapshot = STARTING_UP;
 
     @Override
     public int getRowCount() {
@@ -24,21 +26,22 @@ public class SnipersTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         return switch (Column.at(columnIndex)) {
-            case ITEM_IDENTIFIER -> sniperState.itemId;
-            case LAST_PRICE -> sniperState.lastPrice;
-            case LAST_BID -> sniperState.lastBid;
-            case SNIPER_STATUS -> statusText;
+            case ITEM_IDENTIFIER -> snapshot.itemId;
+            case LAST_PRICE -> snapshot.lastPrice;
+            case LAST_BID -> snapshot.lastBid;
+            case SNIPER_STATE -> state;
         };
     }
 
     public void setStatusText(String newStatusText) {
-        statusText = newStatusText;
+        state = newStatusText;
         fireTableRowsUpdated(0, 0);
     }
 
-    public void sniperStatusChanged(SniperState newSniperState, String newStatusText) {
-        sniperState = newSniperState;
-        statusText = newStatusText;
+    public void sniperStatusChanged(SniperSnapshot newSnapshot) {
+        this.snapshot = newSnapshot;
+        this.state = STATUS_TEXT[newSnapshot.state.ordinal()];
+
         fireTableRowsUpdated(0, 0);
     }
 }
