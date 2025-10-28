@@ -49,6 +49,13 @@ public class SnipersTableModelTest {
         assertColumnEquals(SNIPER_STATE, SnipersTableModel.textFor(BIDDING));
     }
 
+    @Test
+    public void setsUpColumnHeadings() {
+        for (Column column : values()) {
+            assertEquals(column.name, model.getColumnName(column.ordinal()));
+        }
+    }
+
     private Matcher<TableModelEvent> aRowChangedEvent() {
         return samePropertyValuesAs(new TableModelEvent(model, 0));
     }

@@ -3,6 +3,7 @@ package study.goos.e2e;
 import study.goos.Main;
 import study.goos.auctionsniper.SnipersTableModel;
 
+import static study.goos.MainWindow.APPLICATION_TITLE;
 import static study.goos.auctionsniper.SniperSnapshot.SniperState.*;
 import static study.goos.e2e.FakeAuctionServer.XMPP_HOSTNAME;
 
@@ -29,10 +30,12 @@ public class ApplicationRunner {
                 }
             }
         };
-
         thread.setDaemon(true);
         thread.start();
+
         driver = new AuctionSniperDriver(1000);
+        driver.hasTitle(APPLICATION_TITLE);
+        driver.hasColumnTitles();
         driver.showsSniperStatus(SnipersTableModel.textFor(JOINING));
     }
 
