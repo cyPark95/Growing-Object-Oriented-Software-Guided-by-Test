@@ -1,5 +1,7 @@
 package study.goos.auctionsniper;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -16,7 +18,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertEquals;
 import static study.goos.auctionsniper.Column.*;
-import static study.goos.auctionsniper.SniperSnapshot.SniperState.BIDDING;
 
 @RunWith(JMock.class)
 public class SnipersTableModelTest {
@@ -37,16 +38,17 @@ public class SnipersTableModelTest {
 
     @Test
     public void setsSniperValuesInColumns() {
+        SniperSnapshot joining = SniperSnapshot.joining("item id");
+        SniperSnapshot bidding = joining.bidding(555, 666);
         context.checking(new Expectations() {{
-            one(listener).tableChanged(with(aRowChangedEvent()));
+            allowing(listener).tableChanged(with(anyInsertionEvent()));
+            one(listener).tableChanged(with(aChangeInRow(0)));
         }});
 
-        model.sniperStatusChanged(new SniperSnapshot("item id", 555, 666, BIDDING));
+        model.addSniper(joining);
+        model.sniperStateChanged(bidding);
 
-        assertColumnEquals(ITEM_IDENTIFIER, "item id");
-        assertColumnEquals(LAST_PRICE, 555);
-        assertColumnEquals(LAST_BID, 666);
-        assertColumnEquals(SNIPER_STATE, SnipersTableModel.textFor(BIDDING));
+        assertRowMatchesSnapshot(0, bidding);
     }
 
     @Test
@@ -56,13 +58,77 @@ public class SnipersTableModelTest {
         }
     }
 
-    private Matcher<TableModelEvent> aRowChangedEvent() {
-        return samePropertyValuesAs(new TableModelEvent(model, 0));
+    @Test
+    public void notifiesListenersWhenAddingASniper() {
+        SniperSnapshot joining = SniperSnapshot.joining("item123");
+        context.checking(new Expectations() {{
+            one(listener).tableChanged(with(anInsertionAtRow(0)));
+        }});
+
+        assertEquals(0, model.getRowCount());
+
+        model.addSniper(joining);
+
+        assertEquals(1, model.getRowCount());
+        assertRowMatchesSnapshot(0, joining);
     }
 
-    private void assertColumnEquals(Column column, Object expected) {
-        final int rowIndex = 0;
+    @Test
+    public void holdsSnipersInAdditionOrder() {
+        context.checking(new Expectations() {{
+            ignoring(listener);
+        }});
+
+        model.addSniper(SniperSnapshot.joining("item 0"));
+        model.addSniper(SniperSnapshot.joining("item 1"));
+
+        assertEquals("item 0", cellValue(0, Column.ITEM_IDENTIFIER));
+        assertEquals("item 1", cellValue(1, Column.ITEM_IDENTIFIER));
+    }
+
+    public void updatesCorrectRowForSniper() {
+    }
+
+    public void throwsDefectIfNoExistingSniperForAnUpdate() {
+    }
+
+    private void assertRowMatchesSnapshot(int rowIndex, SniperSnapshot snapshot) {
+        assertColumnEquals(rowIndex, ITEM_IDENTIFIER, snapshot.itemId);
+        assertColumnEquals(rowIndex, LAST_PRICE, snapshot.lastPrice);
+        assertColumnEquals(rowIndex, LAST_BID, snapshot.lastBid);
+        assertColumnEquals(rowIndex, SNIPER_STATE, SnipersTableModel.textFor(snapshot.state));
+    }
+
+    private void assertColumnEquals(int rowIndex, Column column, Object expected) {
+        Object valueAt = cellValue(rowIndex, column);
+        assertEquals(expected, valueAt);
+    }
+
+    private Object cellValue(int rowIndex, Column column) {
         final int columnIndex = column.ordinal();
-        assertEquals(expected, model.getValueAt(rowIndex, columnIndex));
+        return model.getValueAt(rowIndex, columnIndex);
+    }
+
+    public Matcher<TableModelEvent> anyInsertionEvent() {
+        return new BaseMatcher<>() {
+            @Override
+            public boolean matches(Object item) {
+                return item instanceof TableModelEvent event
+                        && event.getType() == TableModelEvent.INSERT;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Insertion event did not occur.");
+            }
+        };
+    }
+
+    private Matcher<TableModelEvent> anInsertionAtRow(int rowIndex) {
+        return samePropertyValuesAs(new TableModelEvent(model, rowIndex, rowIndex, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
+    }
+
+    private Matcher<TableModelEvent> aChangeInRow(int rowIndex) {
+        return samePropertyValuesAs(new TableModelEvent(model, rowIndex, rowIndex, TableModelEvent.ALL_COLUMNS, TableModelEvent.UPDATE));
     }
 }

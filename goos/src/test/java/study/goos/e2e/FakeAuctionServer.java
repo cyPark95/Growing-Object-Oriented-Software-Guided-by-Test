@@ -12,6 +12,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import static study.goos.Main.BID_COMMAND_FORMAT;
 import static study.goos.Main.JOIN_COMMAND_FORMAT;
 
@@ -92,8 +93,7 @@ public class FakeAuctionServer {
 
         public void receivesAMessage(Matcher<? super String> messageMatcher) throws InterruptedException {
             final Message message = messages.poll(5, SECONDS);
-            assertThat("Message", message, is(notNullValue()));
-            assertThat(message.getBody(), messageMatcher);
+            assertThat(message, hasProperty("body", messageMatcher));
         }
     }
 }
