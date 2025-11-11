@@ -1,18 +1,17 @@
 package study.goos.e2e;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
-import com.objogate.wl.swing.driver.JFrameDriver;
-import com.objogate.wl.swing.driver.JTableDriver;
-import com.objogate.wl.swing.driver.JTableHeaderDriver;
+import com.objogate.wl.swing.driver.*;
 import com.objogate.wl.swing.gesture.GesturePerformer;
 
+import javax.swing.*;
 import javax.swing.table.JTableHeader;
 
 import static com.objogate.wl.swing.matcher.IterableComponentsMatcher.matching;
 import static com.objogate.wl.swing.matcher.JLabelTextMatcher.withLabelText;
 import static java.lang.String.valueOf;
 import static org.hamcrest.Matchers.equalTo;
-import static study.goos.MainWindow.MAIN_WINDOW_NAME;
+import static study.goos.MainWindow.*;
 
 public class AuctionSniperDriver extends JFrameDriver {
 
@@ -21,6 +20,11 @@ public class AuctionSniperDriver extends JFrameDriver {
                 JFrameDriver.topLevelFrame(named(MAIN_WINDOW_NAME), showingOnScreen()),
                 new AWTEventQueueProber(timeoutMillis, 100)
         );
+    }
+
+    public void startBiddingFor(String itemId) {
+        itemIdField().replaceAllText(itemId);
+        bidButton().click();
     }
 
     public void showsSniperStatus(String statusText) {
@@ -49,5 +53,15 @@ public class AuctionSniperDriver extends JFrameDriver {
                         withLabelText("State")
                 )
         );
+    }
+
+    private JTextFieldDriver itemIdField() {
+        JTextFieldDriver newItemId = new JTextFieldDriver(this, JTextField.class, named(NEW_ITEM_ID_NAME));
+        newItemId.focusWithMouse();
+        return newItemId;
+    }
+
+    private JButtonDriver bidButton() {
+        return new JButtonDriver(this, JButton.class, named(JOIN_BUTTON_NAME));
     }
 }

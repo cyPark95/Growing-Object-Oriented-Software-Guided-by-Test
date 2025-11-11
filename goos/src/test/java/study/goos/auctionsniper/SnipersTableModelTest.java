@@ -1,7 +1,5 @@
 package study.goos.auctionsniper;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -14,8 +12,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static study.goos.auctionsniper.Column.*;
 
@@ -110,18 +107,7 @@ public class SnipersTableModelTest {
     }
 
     public Matcher<TableModelEvent> anyInsertionEvent() {
-        return new BaseMatcher<>() {
-            @Override
-            public boolean matches(Object item) {
-                return item instanceof TableModelEvent event
-                        && event.getType() == TableModelEvent.INSERT;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Insertion event did not occur.");
-            }
-        };
+        return hasProperty("type", equalTo(TableModelEvent.INSERT));
     }
 
     private Matcher<TableModelEvent> anInsertionAtRow(int rowIndex) {
