@@ -1,5 +1,7 @@
 package study.goos.e2e;
 
+import com.objogate.wl.keyboard.KeyboardLayout;
+import com.objogate.wl.robot.RoboticAutomaton;
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.*;
 import com.objogate.wl.swing.gesture.GesturePerformer;
@@ -16,7 +18,8 @@ import static study.goos.MainWindow.*;
 public class AuctionSniperDriver extends JFrameDriver {
 
     public AuctionSniperDriver(int timeoutMillis) {
-        super(new GesturePerformer(),
+        super(
+                new GesturePerformer(new RoboticAutomaton(KeyboardLayout.getKeyboardLayout("US"))),
                 JFrameDriver.topLevelFrame(named(MAIN_WINDOW_NAME), showingOnScreen()),
                 new AWTEventQueueProber(timeoutMillis, 100)
         );
